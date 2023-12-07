@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Prompter
+This is a web application that allows users to share their prompts used in LLMs (such as Chat GPT) with others. Users are also able to edit and delete their prompts which are saved in a MongoDB database.
 
-## Getting Started
+This project uses Next JS, Typescript, Next-Auth (Google OAuth) and MongoDB. With the newly improved Next JS 14, this entire project both acts as the frontend and also the backend. It also allows for the improvement of SSO capabilities and performace improvements due to server-side rendering.
 
-First, run the development server:
+## Setup
+### Google Cloud (Localhost)
+1) [Sign up](https://www.mongodb.com/cloud/atlas/register) for a MongoDB account
+2) Create a new project and input any name for it
+3) Select the newly created project (See the rectangle at the top left)
+4) Go: `APIs & Services` > `OAuth consent screen` > click `Create`
+5) Fill up `App Name` and `Developer contact information`, and click `Save And Continue`
+6) Go: `Credentials` tab > click `Create Credentials` > click `OAuth client ID`
+7) Choose `Application type` as Web application
+8) Add URI for `Authorized JavaScript origins` (Add `http://localhost:3000`)
+9) Add URI for `Authorized redirect URIs` (Add `http://localhost:3000` & `http://localhost:3000/api/auth/callback/google`) *(For the second uri, see [next-auth docs](https://next-auth.js.org/getting-started/rest-api#getpost-apiauthcallbackprovider) on why this redirect is needed)*
+10) Click `Create` and save the `Client ID` and `Client secret` for the .env file
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### MongoDB
+- If you don't have a cluster created
+  1) Click `Create`
+  2) Select `Shared` to create a shared cluster
+  3) Select your appropriate server location
+  4) Create the cluster
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- When cluster have been created
+  1) Click `Database Access` tab and `Add New Database User` with the permission of "**Read and write to any database**" *(Remember your username and password)*
+  2) Click `Network Access` tab, click `Add IP Address`, add **your current** IP address and add another IP address that **includes all IP addresses** which is `0.0.0.0/0`
+  3) Click `Database` tab, click `Connect`, click `Drivers` and copy your `MongoDB URI`
+  4) Replace `<password>` with the password of the user and save it for the .env file
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Environment Variables
+1) From the root folder, create a new file called `.env`
+2) Inside it will have these variables:
+    - `GOOGLE_ID` (Client ID for web application)
+    - `GOOGLE_CLIENT_SECRET` (Client secret)
+    - `MONGODB_URI` (See MongoDB setup for more info) *(Note: Replace `<password>` with the password of the user)*
+    - `NEXTAUTH_URL` (**Development**: Set it to `http://localhost:3000`, **Production**: Set it to the canonical URL of your site) (**SEE**: [Link](https://next-auth.js.org/configuration/options#nextauth_url))
+    - `NEXTAUTH_URL_INTERNAL` (**Development**: Set it to `http://localhost:3000`, **Production**: Set it to the canonical URL of your site) (**SEE**: [Link](https://next-auth.js.org/configuration/options#nextauth_url_internal))
+    - `NEXTAUTH_SECRET` (A random string used to hash tokens, sign & encrypt.) (**SEE**: [Link](https://next-auth.js.org/configuration/options#secret) to generate secret)
