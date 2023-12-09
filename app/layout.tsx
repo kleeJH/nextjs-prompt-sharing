@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en">
+    <html suppressHydrationWarning lang="en">
       <head>
         <link rel="icon" href="/assets/images/logo.png" />
       </head>
